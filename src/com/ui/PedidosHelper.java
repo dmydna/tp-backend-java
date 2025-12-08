@@ -1,6 +1,6 @@
 package com.ui;
 
-import com.servicio.GestorPedidos;
+import com.servicio.ServicioPedidos;
 import com.modelo.Cliente;
 import com.excepciones.NotEncotradoException;
 import com.excepciones.ProductoNotEncotradoException;
@@ -65,7 +65,7 @@ public class PedidosHelper {
 
     public static void listarPedidos(Predicate<Pedido> filtro) throws NotEncotradoException {
 
-        if(GestorPedidos.cantidadPedidos == 0){
+        if(ServicioPedidos.cantidadPedidos == 0){
             throw new NotEncotradoException("No se encontraron pedidos...");
         }
         System.out.printf("%-5s %-15s %-15s\n",

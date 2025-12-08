@@ -4,6 +4,9 @@ import com.excepciones.ProductoNotEncotradoException;
 import com.excepciones.StockInsuficienteException;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.ui.Utils.printWarning;
@@ -11,94 +14,77 @@ import static com.ui.Utils.printWarning;
 
 public class Pedido {
 
-    // TODO Pasar a HashMap <id, ?<Cantidad c, Producto p>>
-    // fix
-    public class infoProducto {
-        // cantidad del producto en el pedido
-        public  int id;
-        public  int cantidad;
-
-        public infoProducto(Producto p, int cantidad){
-            this.cantidad = cantidad;
-            this.id = p.getID();
-        }
-    }
-
     public enum state {
         PROCESANDO,
         COMPLETO,
     }
-
-    private ArrayList<Producto> productos;
-    private ArrayList<infoProducto> infoProductos = new ArrayList<>();
-
+    // porductos<ProductoID, DetallesPedido>
+    private final Map<Integer, DetallesPedidos> detalles = new HashMap<>();
+    public ArrayList<Producto> productos;
     private Cliente cliente;
     private int id = 0;
     public state estado;
+    static int cantidadPedidos = 0; //asigna ids
 
-    static int cantidadPedidos = 0;
-
+    // Contructor
     public Pedido(Cliente cliente){
         this.id = cantidadPedidos;
         this.cliente = cliente;
-        this.productos = new ArrayList<>();
         this.estado = state.PROCESANDO;
+        this.productos = this.getProductos();
         this.cantidadPedidos ++;
     }
 
-    public ArrayList<Producto> getProductos(){
-        return this.productos;
+
+    public void cerrarPedido(){
+        this.estado = state.COMPLETO;
     }
 
-    public ArrayList<infoProducto> getInfoProductos(){
-        return this.infoProductos;
+    public ArrayList<Producto> getProductos() {
+        return this.detalles.values().stream()
+                .map(DetallesPedidos->DetallesPedidos.getProducto()) // Mapea cada Detalle a su Producto
+                .collect(Collectors.toCollection(ArrayList::new)); // Recolecta en un ArrayList
     }
+
     public Cliente getCliente() {
         return this.cliente;
     }
 
     public int cantidadDeUnProductosID(int Id){
-
-        for(infoProducto i : this.infoProductos ){
-            if(i.id == Id){
-                return i.cantidad;
-            }
-        }
-
-        return 0;
+        DetallesPedidos d = detalles.get(Id);
+        return d.getCantidad();
     }
+
+
     public int cantidadProductos(){
-        return this.productos.size();
+        return this.detalles.size();
     }
 
 
     public boolean agregarProducto(Producto p, int cantidad){
         try{
+            int productId = p.getID();
+            // valida existencia de producto
+            DetallesPedidos detalleExiste = this.detalles.get(productId);
+            // valida cantidad pedida y descuenta del stock
             p.descontarStock(cantidad);
 
-            // si existe producto actualiza su cantidad
-            if(this.infoProductos.stream().anyMatch(item -> item.id == p.getID())){
-                for (int i=0; i < this.infoProductos.size(); i++){
-                    if(this.infoProductos.get(i).id == p.getID()){
-                        this.infoProductos.get(i).cantidad += cantidad;
-                    };
-                };
-            }else {
-                this.infoProductos.add(new infoProducto(p, cantidad));
+            if (detalleExiste != null) {
+                detalleExiste.setCantidad(cantidad);
+            } else {
+                this.detalles.put(productId, new DetallesPedidos(p, cantidad));
             }
 
-            productos.add(p);
             return true;
         }catch (StockInsuficienteException e){
             printWarning(e.getMessage());
             return false;
         }
-
     }
 
     public double calcularTotal(){
         double total = 0;
-        for (Producto p : productos){
+        for (Producto p : this.getProductos()){
             total += p.getPrecio() * p.getCantidadEnStock();
         }
         return total;

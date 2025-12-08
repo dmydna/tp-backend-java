@@ -9,7 +9,7 @@ import com.modelo.Producto;
 
 import static com.ui.ProductosHelper.mostrarInformacion;
 
-public class GestorProductos {
+public class ServicioProductos {
 
     private final ArrayList<Producto> productos = new ArrayList<>();
     public static int cantidadProductos = 0;

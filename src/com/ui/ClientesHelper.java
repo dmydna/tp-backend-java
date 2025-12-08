@@ -1,6 +1,6 @@
 package com.ui;
 
-import com.servicio.GestorClientes;
+import com.servicio.ServicioClientes;
 import com.modelo.Cliente;
 import com.excepciones.NotEncotradoException;
 
@@ -40,7 +40,7 @@ public class ClientesHelper {
 
     /** Muestra una lista de clientes por consola segun filtro */
     public static void listarClientes(Predicate<Cliente> filtro) throws NotEncotradoException {
-        if(GestorClientes.cantidadClientes == 0){
+        if(ServicioClientes.cantidadClientes == 0){
             throw new NotEncotradoException("Clientes no encontrados...");
         }
         System.out.printf("%-5s %-15s %-20s\n",

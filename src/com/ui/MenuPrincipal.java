@@ -240,9 +240,9 @@ public class MenuPrincipal {
 
         printSuccess("Muestra agregada con existo....");
         System.out.printf("productos agregados: %d\nclientes agregados: %d\npedidos agregados: %d\n",
-                GestorProductos.cantidadProductos,
-                GestorClientes.cantidadClientes,
-                GestorPedidos.cantidadPedidos
+                ServicioProductos.cantidadProductos,
+                ServicioClientes.cantidadClientes,
+                ServicioPedidos.cantidadPedidos
         );
         pausarConsola();
     }

@@ -1,6 +1,6 @@
 package com.ui;
 
-import com.servicio.GestorProductos;
+import com.servicio.ServicioProductos;
 import com.excepciones.NotValidValueException;
 import com.excepciones.ProductoNotEncotradoException;
 import com.modelo.Bebida;
@@ -55,7 +55,7 @@ public class ProductosHelper {
     /** Muestra la lista productos disponibles, solicita un id  y devuelve un producto si es valido */
     public static Producto seleccionarProductoPorInput() throws ProductoNotEncotradoException {
         System.out.println("Selecciona un producto:");
-        if(GestorProductos.cantidadProductos != 0){
+        if(ServicioProductos.cantidadProductos != 0){
             System.out.println();
             listarProductos(p->true);
             System.out.println();
@@ -81,7 +81,7 @@ public class ProductosHelper {
 
 /** Muestra la lista productos disponibles */
     public static void listarProductos(Predicate<Producto> filtro) throws ProductoNotEncotradoException {
-        if(GestorProductos.cantidadProductos == 0){
+        if(ServicioProductos.cantidadProductos == 0){
             throw new ProductoNotEncotradoException("No se encontraron Productos...");
         }
         System.out.printf("%-5s %-30s %-15s %-15s %-10s\n",

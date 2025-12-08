@@ -4,7 +4,7 @@ import com.excepciones.NotEncotradoException;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
-public class GestorClientes {
+public class ServicioClientes {
 
     private final ArrayList<Cliente> clientes = new ArrayList<>();
     public static int cantidadClientes = 0;

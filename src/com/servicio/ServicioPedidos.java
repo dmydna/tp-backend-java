@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.function.Predicate;
 
-public class GestorPedidos {
+public class ServicioPedidos {
 
     private final ArrayList<Pedido> pedidos = new ArrayList<>();
     public static int cantidadPedidos = 0;
@@ -54,7 +54,7 @@ public class GestorPedidos {
         if(pedido.isEmpty()){
             throw new NotEncotradoException("Producto no encontrados....");
         }
-        return new ArrayList<>(pedido.get().getProductos());
+        return pedido.get().getProductos();
     }
 
 }
